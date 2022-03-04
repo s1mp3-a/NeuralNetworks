@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using NeuralNetworks.NeuronWorks;
 
-namespace NeuralNetworks
+namespace NeuralNetworks.LayerWorks
 {
     public class ParallelLayerEvaluator : ILayerEvaluator
     {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NeuralNetworks.NeuronWorks;
 
-namespace NeuralNetworks
+namespace NeuralNetworks.LayerWorks
 {
     public class SequentialLayerEvaluator : ILayerEvaluator
     {

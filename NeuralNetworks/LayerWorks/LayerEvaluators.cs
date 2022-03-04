@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NeuralNetworks
+namespace NeuralNetworks.LayerWorks
 {
     internal static class LayerEvaluators
     {

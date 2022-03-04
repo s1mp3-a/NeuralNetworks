@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using NeuralNetworks.NeuronWorks;
 
-namespace NeuralNetworks
+namespace NeuralNetworks.LayerWorks
 {
     public class Layer
     {
         private readonly List<Neuron> _neurons = new();
         private ILayerEvaluator _evaluator;
+
+        public int NeuronCount => _neurons.Count;
 
         public Layer(int neuronCount, int neuronSynapseCount, Func<double, double> neuronActivator = null)
         {

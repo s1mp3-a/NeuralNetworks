@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NeuralNetworks
+﻿namespace NeuralNetworks.NeuronWorks
 {
     internal static class NeuronFunctions
     {

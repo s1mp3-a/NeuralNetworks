@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using NeuralNetworks.NeuronWorks;
 
-namespace NeuralNetworks
+namespace NeuralNetworks.LayerWorks
 {
     public interface ILayerEvaluator
     {
