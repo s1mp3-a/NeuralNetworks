@@ -4,11 +4,11 @@ namespace NeuralNetworks.NeuronWorks
 {
     public class Neuron
     {
-        private int _synapseCount;
+        private readonly int _synapseCount;
         private double _bias;
-        private double[] _weights;
+        internal double[] _weights;
         private double[] _input;
-        private Func<double, double> _activate;
+        private readonly Func<double, double> _activate;
 
         public Neuron(int synapseCount, Func<double, double> activator = null)
         {
@@ -25,10 +25,10 @@ namespace NeuralNetworks.NeuronWorks
             
             for (int i = 0; i < _synapseCount; i++)
             {
-                _weights[i] = 1 - rnd.NextDouble();
+                _weights[i] = 1 + rnd.NextDouble();
             }
             
-            _bias = 1 - rnd.NextDouble();
+            _bias = 0;
         }
 
         private double SynapseSum()
@@ -45,9 +45,14 @@ namespace NeuralNetworks.NeuronWorks
             return sum;
         }
 
-        public void SetInput(double[] input)
+        internal void SetWeight(int index, double value)
         {
-            
+            _weights[index] = value;
+        }
+
+        internal void SetInput(double[] input)
+        {
+            _input = input;
         }
 
         public double Activate()
