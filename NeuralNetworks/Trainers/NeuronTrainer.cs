@@ -7,7 +7,6 @@ namespace NeuralNetworks.Trainers
     public class NeuronTrainer
     {
         private readonly Neuron _neuron;
-        private readonly Func<double, double> _activator = NeuronFunctions.Activators.Linear;
         private readonly Func<double, double, double, double> _errorPrime = NeuronFunctions.Derivatives.Linear;
         private readonly double[] _examples;
         private readonly double[][] _inputs;

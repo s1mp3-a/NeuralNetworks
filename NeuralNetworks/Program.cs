@@ -14,4 +14,4 @@ var results = new double[] {1d, 2d};
 var data = (results, inputs);
 
 var trainer = new NeuronTrainer(aboba, data);
-trainer.Train(100, 0.02);
+trainer.Train(100, 0.1);

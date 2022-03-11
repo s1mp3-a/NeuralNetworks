@@ -7,7 +7,7 @@ namespace NeuralNetworks.LayerWorks
     public class Layer
     {
         private readonly List<Neuron> _neurons = new();
-        private ILayerEvaluator _evaluator;
+        private readonly ILayerEvaluator _evaluator;
 
         public int NeuronCount => _neurons.Count;
 
