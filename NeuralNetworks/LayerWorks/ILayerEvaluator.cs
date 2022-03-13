@@ -5,6 +5,6 @@ namespace NeuralNetworks.LayerWorks
 {
     public interface ILayerEvaluator
     {
-        public double[] Evaluate(List<Neuron> neurons);
+        public double[] Evaluate(Neuron[] neurons);
     }
 }

@@ -39,7 +39,7 @@ namespace NeuralNetworks.Trainers
 
         private void CorrectWeights(double eta, double yK, double oK, double[] xK)
         {
-            for (int i = 0; i < _neuron._weights.Length; i++)
+            for (int i = 0; i < _neuron._weights.Count; i++)
             {
                 var value = _neuron._weights[i] - eta * _errorPrime(yK, oK, xK[i]);
                 _neuron.SetWeight(i, value);

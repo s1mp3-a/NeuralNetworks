@@ -6,7 +6,7 @@ namespace NeuralNetworks.LayerWorks
 {
     public class SequentialLayerEvaluator : ILayerEvaluator
     {
-        public double[] Evaluate(List<Neuron> neurons)
+        public double[] Evaluate(Neuron[] neurons)
         {
             return neurons.Select(neuron => neuron.Activate()).ToArray();
         }

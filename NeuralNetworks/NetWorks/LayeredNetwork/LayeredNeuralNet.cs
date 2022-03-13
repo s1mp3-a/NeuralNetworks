@@ -7,6 +7,7 @@ namespace NeuralNetworks.NetWorks.LayeredNetwork
     public class LayeredNeuralNet
     {
         private readonly List<Layer> _layers = new();
+        internal List<Layer> Layers => _layers;
 
         public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, Func<double, double> activator = null)
         {

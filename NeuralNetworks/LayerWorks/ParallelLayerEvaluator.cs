@@ -6,10 +6,10 @@ namespace NeuralNetworks.LayerWorks
 {
     public class ParallelLayerEvaluator : ILayerEvaluator
     {
-        public double[] Evaluate(List<Neuron> neurons)
+        public double[] Evaluate(Neuron[] neurons)
         {
-            var res = new double[neurons.Count];
-            Parallel.For(0, neurons.Count, i =>
+            var res = new double[neurons.Length];
+            Parallel.For(0, neurons.Length, i =>
             {
                 res[i] = neurons[i].Activate();
             });
