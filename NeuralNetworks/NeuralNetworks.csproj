@@ -8,8 +8,4 @@
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="MathNet.Numerics" Version="5.0.0-beta01" />
-    </ItemGroup>
-
 </Project>

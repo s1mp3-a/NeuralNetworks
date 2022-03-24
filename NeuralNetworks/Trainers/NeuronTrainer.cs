@@ -7,7 +7,8 @@ namespace NeuralNetworks.Trainers
     public class NeuronTrainer
     {
         private readonly Neuron _neuron;
-        private readonly Func<double, double, double, double> _errorPrime = NeuronFunctions.Derivatives.Linear;
+        //TODO
+        //private readonly Func<double, double, double, double> _errorPrime = NeuronFunctions.Derivatives.Linear;
         private readonly double[] _examples;
         private readonly double[][] _inputs;
 
@@ -39,10 +40,11 @@ namespace NeuralNetworks.Trainers
 
         private void CorrectWeights(double eta, double yK, double oK, double[] xK)
         {
-            for (int i = 0; i < _neuron._weights.Count; i++)
+            //TODO
+            for (int i = 0; i < _neuron._weights.Length; i++)
             {
-                var value = _neuron._weights[i] - eta * _errorPrime(yK, oK, xK[i]);
-                _neuron.SetWeight(i, value);
+                //var value = _neuron._weights[i] - eta * _errorPrime(yK, oK, xK[i]);
+                //_neuron.SetWeight(i, value);
             }
         }
 

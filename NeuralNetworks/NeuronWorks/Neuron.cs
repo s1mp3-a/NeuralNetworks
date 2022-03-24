@@ -1,5 +1,4 @@
 ﻿using System;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace NeuralNetworks.NeuronWorks
 {
@@ -7,16 +6,18 @@ namespace NeuralNetworks.NeuronWorks
     {
         private readonly int _synapseCount;
         private double _bias;
-        internal Vector<double> _weights;
         private double[] _input;
         private readonly Func<double, double> _activate;
-
+        
+        internal double[] _weights;
+        internal double _value;
+        
         public Neuron(int synapseCount, Func<double, double> activator = null)
         {
-            _activate = activator ?? NeuronFunctions.Activators.Sigmoid;
+            _activate = activator ?? NeuronFunctions.Functions.Sigmoid.Activator;
             _synapseCount = synapseCount;
             _input = new double[_synapseCount];
-            _weights = Vector<double>.Build.Dense(_synapseCount);
+            _weights = new double[_synapseCount];
             RandomizeWeightsAndBias();
         }
 
@@ -51,7 +52,7 @@ namespace NeuralNetworks.NeuronWorks
             _weights[index] = value;
         }
 
-        internal void SetWeights(Vector<double> weights) => _weights = weights;
+        internal void SetWeights(double[] weights) => _weights = weights;
 
         internal void SetInput(double[] input)
         {
@@ -61,7 +62,8 @@ namespace NeuralNetworks.NeuronWorks
         public double Activate()
         {
             var res = SynapseSum();
-            return _activate(res);
+            _value = _activate(res);
+            return _value;
         }
     }
 }

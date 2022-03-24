@@ -4,10 +4,10 @@ namespace NeuralNetworks.NeuronWorks
 {
     internal class NeuronErrorDerivativesBuilder
     {
-        public Func<double, double, double, double> Sigmoid { get; } =
-            (yK, oK, xK) => -(yK - oK) * oK * (1 - oK) * xK;
+        public Func<double, double> Sigmoid { get; } =
+            (x) => x * (1 - x);
 
-        public Func<double, double, double, double> Linear { get; } =
-            (yK, oK, xK) => -2d * (yK - oK) * xK;
+        public Func<double, double> Linear { get; } =
+            x => -2d * x;
     }
 }

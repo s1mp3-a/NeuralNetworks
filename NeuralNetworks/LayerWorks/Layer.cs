@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
 using NeuralNetworks.NeuronWorks;
 
 namespace NeuralNetworks.LayerWorks
@@ -9,17 +8,19 @@ namespace NeuralNetworks.LayerWorks
     {
         private readonly Neuron[] _neurons;
         private readonly ILayerEvaluator _evaluator;
+        internal readonly FunctionTypeTuple _layerFunctions;
 
         public int NeuronCount => _neurons.Length;
         public Neuron[] Neurons => _neurons;
 
-        public Layer(int neuronCount, int neuronSynapseCount, Func<double, double> neuronActivator = null)
+        public Layer(int neuronCount, int neuronSynapseCount, FunctionTypeTuple аFunctionTypeTuple = null)
         {
             _neurons = new Neuron[neuronCount];
             _evaluator = neuronCount >= 384 ? LayerEvaluators.Parallel : LayerEvaluators.Sequential;
+            _layerFunctions = аFunctionTypeTuple ?? NeuronFunctions.Functions.Sigmoid;
             for (int i = 0; i < neuronCount; i++)
             {
-                _neurons[i] = new Neuron(neuronSynapseCount, neuronActivator);
+                _neurons[i] = new Neuron(neuronSynapseCount, _layerFunctions.Activator);
             }
         }
 
@@ -28,15 +29,6 @@ namespace NeuralNetworks.LayerWorks
             foreach (var neuron in _neurons)
             {
                 neuron.SetInput(neuronInput);
-            }
-        }
-
-        public void SetWeights(Vector<double>[] weights)
-        {
-            int a = 0;
-            foreach (var neuron in _neurons)
-            {
-                neuron._weights = weights[a++];
             }
         }
 

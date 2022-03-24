@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NeuralNetworks.LayerWorks;
+using NeuralNetworks.NeuronWorks;
 
 namespace NeuralNetworks.NetWorks.LayeredNetwork
 {
@@ -9,14 +10,14 @@ namespace NeuralNetworks.NetWorks.LayeredNetwork
         private readonly List<Layer> _layers = new();
         internal List<Layer> Layers => _layers;
 
-        public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, Func<double, double> activator = null)
+        public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple functionType = null)
         {
-            GenerateLayers(initLayerSynapseCount, layerNeuronCounts, activator);
+            GenerateLayers(initLayerSynapseCount, layerNeuronCounts, functionType);
         }
 
-        private void GenerateLayers(int initLayerSynapseCount, int[] layerNeuronCounts, Func<double, double> activator)
+        private void GenerateLayers(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple functionType)
         {
-            var currentLayer = new Layer(layerNeuronCounts[0], initLayerSynapseCount, activator);
+            var currentLayer = new Layer(layerNeuronCounts[0], initLayerSynapseCount, functionType);
             var previousLayer = currentLayer;
             _layers.Add(currentLayer);
 
