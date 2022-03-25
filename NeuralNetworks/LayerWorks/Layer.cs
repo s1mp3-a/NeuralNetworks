@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NeuralNetworks.NeuronWorks;
 
 namespace NeuralNetworks.LayerWorks
@@ -16,7 +17,7 @@ namespace NeuralNetworks.LayerWorks
         public Layer(int neuronCount, int neuronSynapseCount, FunctionTypeTuple аFunctionTypeTuple = null)
         {
             _neurons = new Neuron[neuronCount];
-            _evaluator = neuronCount >= 384 ? LayerEvaluators.Parallel : LayerEvaluators.Sequential;
+            _evaluator = neuronCount*neuronSynapseCount >= 256 ? LayerEvaluators.Parallel : LayerEvaluators.Sequential;
             _layerFunctions = аFunctionTypeTuple ?? NeuronFunctions.Functions.Sigmoid;
             for (int i = 0; i < neuronCount; i++)
             {
