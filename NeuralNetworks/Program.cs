@@ -52,4 +52,4 @@ var results = new double[][]
 var data = (results, inputs);
 var net = new LayeredNeuralNet(3, new []{ 25, 25, 1});
 var trainer = new LayeredNetTrainer(net, data);
-trainer.Train(10000, 0.0005);
+trainer.Train(10000, 0.01);

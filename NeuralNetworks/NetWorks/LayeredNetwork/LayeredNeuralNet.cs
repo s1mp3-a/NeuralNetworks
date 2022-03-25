@@ -9,6 +9,7 @@ namespace NeuralNetworks.NetWorks.LayeredNetwork
     {
         private readonly List<Layer> _layers = new();
         internal List<Layer> Layers => _layers;
+        internal double[] Output { get; private set; }
 
         public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple functionType = null)
         {
@@ -34,12 +35,13 @@ namespace NeuralNetworks.NetWorks.LayeredNetwork
             _layers[0].SetInputs(initialParams);
             var layerResult = _layers[0].EvaluateLayer();
 
-            for (int i = 0; i < _layers.Count; i++)
+            for (int i = 1; i < _layers.Count; i++)
             {
                 _layers[i].SetInputs(layerResult);
                 layerResult = _layers[i].EvaluateLayer();
             }
 
+            Output = layerResult;
             return layerResult;
         }
     }
