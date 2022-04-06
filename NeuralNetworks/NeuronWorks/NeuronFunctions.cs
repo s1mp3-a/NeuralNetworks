@@ -2,6 +2,6 @@
 {
     internal static class NeuronFunctions
     {
-        public static FunctionsTuple Functions { get; } = new(new(), new());
+        public static FunctionsTuple Functions { get; } = new(new NeuronFunctionsBuilder(), new NeuronErrorDerivativesBuilder());
     }
 }

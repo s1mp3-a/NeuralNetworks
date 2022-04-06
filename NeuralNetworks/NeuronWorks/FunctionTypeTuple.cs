@@ -9,7 +9,6 @@ namespace NeuralNetworks.NeuronWorks
     {
         public FunctionTypeTuple(Act a, Der b)
             : base(a, b) { }
-
         public Act Activator => Item1;
         public Der Derivative => Item1;
     }
