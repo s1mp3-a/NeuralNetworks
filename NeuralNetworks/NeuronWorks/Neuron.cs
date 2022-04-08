@@ -5,10 +5,10 @@ namespace NeuralNetworks.NeuronWorks
     public class Neuron
     {
         private readonly int _synapseCount;
-        private double _bias;
         private double[] _input;
         private readonly Func<double, double> _activate;
         
+        internal double _bias;
         internal double[] _weights;
         internal double _value;
         
@@ -27,9 +27,9 @@ namespace NeuralNetworks.NeuronWorks
             
             for (int i = 0; i < _synapseCount; i++)
             {
-                _weights[i] = rnd.NextDouble() * 16d - 8d;
+                _weights[i] = rnd.NextDouble() * 10d - 5d;
             }
-            
+
             _bias = 0;
         }
 

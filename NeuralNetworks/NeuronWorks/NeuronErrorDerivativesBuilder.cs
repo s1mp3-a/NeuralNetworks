@@ -7,6 +7,6 @@ namespace NeuralNetworks.NeuronWorks
         public Func<double, double> Sigmoid { get; } =
             x => x * (1 - x);
         public Func<double, double> Linear { get; } =
-            x => -2d * x;
+            x => 1;
     }
 }

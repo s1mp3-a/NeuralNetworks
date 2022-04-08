@@ -11,20 +11,20 @@ namespace NeuralNetworks.NetWorks.LayeredNetwork
         internal List<Layer> Layers => _layers;
         internal double[] Output { get; private set; }
 
-        public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple functionType = null)
+        public LayeredNeuralNet(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple[] functionType = null)
         {
             GenerateLayers(initLayerSynapseCount, layerNeuronCounts, functionType);
         }
 
-        private void GenerateLayers(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple functionType)
+        private void GenerateLayers(int initLayerSynapseCount, int[] layerNeuronCounts, FunctionTypeTuple[] functionType)
         {
-            var currentLayer = new Layer(layerNeuronCounts[0], initLayerSynapseCount, functionType);
+            var currentLayer = new Layer(layerNeuronCounts[0], initLayerSynapseCount, functionType?[0]);
             var previousLayer = currentLayer;
             _layers.Add(currentLayer);
 
             for (int i = 1; i < layerNeuronCounts.Length; i++)
             {
-                currentLayer = new Layer(layerNeuronCounts[i], previousLayer.NeuronCount);
+                currentLayer = new Layer(layerNeuronCounts[i], previousLayer.NeuronCount, functionType?[i]);
                 previousLayer = currentLayer;
                 _layers.Add(currentLayer);
             }

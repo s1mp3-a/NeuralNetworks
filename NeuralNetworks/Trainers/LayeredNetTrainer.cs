@@ -12,8 +12,9 @@ namespace NeuralNetworks.Trainers
         private readonly LayeredNeuralNet _net;
         private readonly double[][] _examples;
         private readonly double[][] _inputs;
+        private double[][] _layersErrors;
 
-        public LayeredNetTrainer(LayeredNeuralNet net, (double[][] results, double[][] inputs) data)
+        public LayeredNetTrainer(LayeredNeuralNet net, (double[][] inputs, double[][] results) data)
         {
             _net = net;
             _examples = data.results;
@@ -22,7 +23,6 @@ namespace NeuralNetworks.Trainers
 
         public void Train(int epochCount, double learningRate)
         {
-            var emptyLine = new string(Enumerable.Range(1, Console.BufferWidth).Select(s => ' ').ToArray());
             for (int i = 0; i < epochCount; i++)
             {
                 TrainNetwork(learningRate, out var error);
@@ -32,8 +32,8 @@ namespace NeuralNetworks.Trainers
             
             for (int i = 0; i < _inputs.GetLength(0); i++)
             {
-                var aboba = _net.GetResult(_inputs[i]);
-                Console.WriteLine($"For input [{string.Join("; ", _inputs[i])}]    got [{string.Join("; ", aboba)}]    expected[{string.Join("; ", _examples[i])}]");
+                var netResult = _net.GetResult(_inputs[i]);
+                Console.WriteLine($"For input [{string.Join("; ", _inputs[i])}]    got [{string.Join("; ", netResult)}]    expected[{string.Join("; ", _examples[i])}]");
             }
         }
 
@@ -42,8 +42,13 @@ namespace NeuralNetworks.Trainers
             trainingError = 0d;
             for (int exampleIdx = 0; exampleIdx < _examples.GetLength(0); exampleIdx++)
             {
-                //Feed forward training inputs
+
+                //Feed forward training inputs so that the neurons have computed their outputs (values)
                 _net.GetResult(_inputs[exampleIdx]);
+                
+                //Calculate per layer errors
+                CalculateLayersErrors(exampleIdx);
+                
                 BackPropagation(exampleIdx, learningRate);
 
                 trainingError += _net.Layers[^1].Neurons
@@ -52,50 +57,68 @@ namespace NeuralNetworks.Trainers
             }
         }
 
-        private void BackPropagation(int exampleIdx, double learningRate)
+        private void CalculateLayersErrors(int exampleIdx)
         {
-            var error = _examples[exampleIdx].Select((e, i) => _net.Output[i] - e).ToArray();
+            _layersErrors = new double[_net.Layers.Count][];
 
-            for (int i = _net.Layers.Count-1; i >= 0; i--)
+            _layersErrors[^1] = new double[_net.Layers[^1].NeuronCount];
+            for (int neuronIdx = 0; neuronIdx < _net.Layers[^1].Neurons.Length; neuronIdx++)
             {
-                var outputs = i == 0 ?
-                    _inputs[exampleIdx] 
-                    : _net.Layers[i - 1].Neurons.Select(n => n._value).ToArray();
-                
-                error = GetLayerError(_net.Layers[i], error, outputs, learningRate);
+                _layersErrors[^1][neuronIdx] = _examples[exampleIdx][neuronIdx] - _net.Layers[^1].Neurons[neuronIdx]._value;
             }
-        }
-
-        private double[] GetLayerError(Layer currentLayer, double[] nodesError, double[] prevLayerOutputs, double learningRate)
-        {
-            var nodesDeltaWeight = new double[nodesError.Length];
-            var outputErrors = new double[prevLayerOutputs.Length];
-
-            for (int nIdx = 0; nIdx < currentLayer.NeuronCount; nIdx++)
+            
+            for (int layerIdx = _net.Layers.Count - 2; layerIdx >= 0; layerIdx--)
             {
-                var currentNode = currentLayer.Neurons[nIdx];
+                var leftLayer = _net.Layers[layerIdx];
+                var rightLayer = _net.Layers[layerIdx + 1];
+                _layersErrors[layerIdx] = new double[leftLayer.NeuronCount];
                 
-                var error = nodesError[nIdx];
-                nodesDeltaWeight[nIdx] = error * currentLayer._layerFunctions.Derivative(currentNode._value);
-
-                for (int wIdx = 0; wIdx < currentNode._weights.Length; wIdx++)
+                for (int neuronIdx = 0; neuronIdx < leftLayer.NeuronCount; neuronIdx++)
                 {
-                    currentNode._weights[wIdx] -= prevLayerOutputs[wIdx] * nodesDeltaWeight[nIdx] * learningRate;
-                    outputErrors[wIdx] += nodesDeltaWeight[nIdx] * currentNode._weights[wIdx];
+                    var nodeError = 0d;
+                    for (int rightNIdx = 0; rightNIdx < rightLayer.NeuronCount; rightNIdx++)
+                    {
+                        nodeError += _layersErrors[layerIdx + 1][rightNIdx] * rightLayer.Neurons[rightNIdx]._weights[neuronIdx]; //TODO maybe index misplacement
+                    }
+
+                    _layersErrors[layerIdx][neuronIdx] = nodeError;
                 }
             }
-
-            return outputErrors;
         }
 
-        private double GetNodeError(int nIdx, int layerIndex, ref double[] nodesWeightsDeltas)
+        private void BackPropagation(int exampleIdx, double learningRate)
         {
-            var res = 0d;
-            for (int i = 0; i < _net.Layers[^layerIndex].NeuronCount; i++)
+            for (int i = _net.Layers.Count-1; i >= 0; i--)
             {
-                res += _net.Layers[^layerIndex].Neurons[i]._weights[nIdx] * nodesWeightsDeltas[i];
+                AdjustWeightsAndBias(i, exampleIdx, learningRate);
             }
-            return res;
+        }
+
+        private void AdjustWeightsAndBias(int layerIndex, int exampleIdx, double learningRate)
+        {
+            var layer = _net.Layers[layerIndex];
+            for (int neuronIdx = 0; neuronIdx < layer.Neurons.Length; neuronIdx++)
+            {
+                var neuron = layer.Neurons[neuronIdx];
+                var gradient = _layersErrors[layerIndex][neuronIdx] * layer._layerFunctions.Derivative(neuron._value);
+                
+                for (int weightIdx = 0; weightIdx < neuron._weights.Length; weightIdx++)
+                {
+                    double deltaWeight = learningRate
+                                         * gradient
+                                         * GetPreviousLayerNeuronToWeightOutput(layerIndex, weightIdx, exampleIdx);
+                    
+                    neuron._weights[weightIdx] = neuron._weights[weightIdx] + deltaWeight;
+                }
+
+                neuron._bias = neuron._bias + gradient;
+            }
+        }
+
+        private double GetPreviousLayerNeuronToWeightOutput(int currentLayerIndex, int weightIdx, int exampleIdx)
+        {
+            var lIdx = currentLayerIndex - 1;
+            return currentLayerIndex == 0 ? _inputs[exampleIdx][weightIdx] : _net.Layers[lIdx].Neurons[weightIdx]._value;
         }
     }
 }
