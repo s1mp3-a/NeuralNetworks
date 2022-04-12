@@ -8,6 +8,7 @@ namespace NeuralNetworks.NeuronWorks
             : base(a, b) { }
         public FunctionTypeTuple Sigmoid => new(Item1.Sigmoid, Item2.Sigmoid);
         public FunctionTypeTuple Linear => new(Item1.Linear, Item2.Linear);
+        public FunctionTypeTuple Tanh => new(Item1.Tanh, Item2.Tanh);
     }
 
 }

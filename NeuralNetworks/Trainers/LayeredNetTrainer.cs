@@ -111,7 +111,7 @@ namespace NeuralNetworks.Trainers
                     neuron._weights[weightIdx] = neuron._weights[weightIdx] + deltaWeight;
                 }
 
-                neuron._bias = neuron._bias + gradient;
+                neuron._bias = neuron._bias + gradient * learningRate;
             }
         }
 

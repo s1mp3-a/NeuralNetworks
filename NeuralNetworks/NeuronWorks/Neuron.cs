@@ -27,7 +27,7 @@ namespace NeuralNetworks.NeuronWorks
             
             for (int i = 0; i < _synapseCount; i++)
             {
-                _weights[i] = rnd.NextDouble() * 10d - 5d;
+                _weights[i] = rnd.NextDouble() * 8d - 4d;
             }
 
             _bias = 0;
