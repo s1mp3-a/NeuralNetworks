@@ -6,4 +6,7 @@
         <Nullable>disable</Nullable>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+      <Folder Include="NetWorks\KohonenNetwork" />
+    </ItemGroup>
 </Project>
